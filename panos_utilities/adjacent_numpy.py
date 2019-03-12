@@ -3,10 +3,11 @@ import numpy as np
 
 def different_sign(a, b):
     """
-      :param a: number of numpy array
-      :param b: number of numpy array
-      :return: Returns true if a an b have different signs, or if a is zero an b is nonzero. Element-wise
-      calculation for numpy arrays.
+    Returns true if a an b have different signs, or if a is zero an b is nonzero. Element-wise
+    calculation for numpy arrays.
+    :param a: number of numpy array
+    :param b: number of numpy array
+    :return: boolean or numpy.array(dtype=bool)
     """
     return ((a <= 0) & (b > 0)) | ((a >= 0) & (b < 0))
 
@@ -38,29 +39,18 @@ def zero_cross_boolean_index(a):
 
 def zero_cross_elems(x, y):
     """
+    find  the values of x for which y crosses zero. The values returned are the ones before or exactly at
+    the zero crossing.If the last value of x is a root, it does not get returned
     :param x: numpy array (sorted)
     :param y: numpy array must have the same length with x
-    :return: the values of x for which y crosses zero. The values returned are the ones before or exactly at
-    the zero crossing.If the last value of x is a root, it does not get returned.
+    :return: tuple (xbefore,xafter,ybefore,yafter) .
     """
     assert (x.size == y.size), "x and y must have equal size!"
     indices = np.arange(x.size)[zero_cross_boolean_index(y)]
 
-    return x[indices], x[indices+1], y[indices], y[indices+1]
+    return x[indices], x[indices + 1], y[indices], y[indices + 1]
 
 
-if __name__ == '__main__':
-    import matplotlib.pyplot as plt
 
-    x = np.linspace(0, 10, 100)
-    y = np.sin(2 * np.pi * x)
-
-    x_before,x_after,y_before,y_after = zero_cross_elems(x,y)
-
-    plt.plot(x,y,'k-',marker='+')
-    plt.plot(x_before,y_before,'ro')
-    plt.plot(x_after,y_after,'rx')
-    plt.show()
-#
 # print(zero_cross_elems(np.array([0, 2, 3, -1, 1, 0])))
 # print(zero_cross_elems(np.array([-1, 1, 2])))
