@@ -3,7 +3,7 @@ from collections import namedtuple
 import numpy as np
 import scipy.optimize as optimize
 
-version = '0.2'
+version = '0.1.1'
 
 
 def sample_fun(f, window, n_samples):

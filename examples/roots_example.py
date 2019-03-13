@@ -5,6 +5,7 @@ import os
 my_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(1, my_path)
 
+import panos_utilities
 import panos_utilities.roots as roots
 
 if __name__ == '__main__':
@@ -15,6 +16,7 @@ if __name__ == '__main__':
         return np.sin(2 * np.pi * x)
 
 
+    print('Using panos_utilities version {}'.format(panos_utilities.version))
     print('Using roots version {}'.format(roots.version))
 
     level = 0.5
