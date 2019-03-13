@@ -13,10 +13,10 @@ if __name__ == '__main__':
     x = np.linspace(0, 10, 100)
     y = np.sin(2 * np.pi * x)
 
-    x_before, x_after, y_before, y_after = adj.zero_cross_elems(x, y)
+    result = adj.zero_cross_elems(x, y)
 
     plt.plot(x, y, 'k-', marker='+')
-    plt.plot(x_before, y_before, 'ro')
-    plt.plot(x_after, y_after, 'rx')
+    plt.plot(result.x_before, result.y_before, 'ro')
+    plt.plot(result.x_after, result.y_after, 'rx')
     plt.show()
 #

@@ -1,4 +1,5 @@
 import numpy as np
+from collections import namedtuple
 
 
 def different_sign(a, b):
@@ -37,20 +38,18 @@ def zero_cross_boolean_index(a):
     return np.append(did_it_cross, [False])
 
 
+Zero_Cross_Result = namedtuple('Zero_Cross_Result', ['x_before', 'x_after', 'y_before', 'y_after'])
+
+
 def zero_cross_elems(x, y):
     """
     find  the values of x for which y crosses zero. The values returned are the ones before or exactly at
     the zero crossing.If the last value of x is a root, it does not get returned
     :param x: numpy array (sorted)
     :param y: numpy array must have the same length with x
-    :return: tuple (xbefore,xafter,ybefore,yafter) .
+    :return: namedtuple Zero_Cross_Result (xbefore,xafter,ybefore,yafter) .
     """
     assert (x.size == y.size), "x and y must have equal size!"
     indices = np.arange(x.size)[zero_cross_boolean_index(y)]
 
-    return x[indices], x[indices + 1], y[indices], y[indices + 1]
-
-
-
-# print(zero_cross_elems(np.array([0, 2, 3, -1, 1, 0])))
-# print(zero_cross_elems(np.array([-1, 1, 2])))
+    return Zero_Cross_Result(x[indices], x[indices + 1], y[indices], y[indices + 1])
