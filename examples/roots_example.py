@@ -15,12 +15,6 @@ if __name__ == '__main__':
         return np.sin(2 * np.pi * x)
 
 
-    def sample_fun(f, window, n_samples):
-        x0, x1 = window
-        x = np.linspace(x0, x1, n_samples)
-        return (x, f(x))
-
-
     print('Using roots version {}'.format(roots.version))
 
     level = 0.5
@@ -31,7 +25,7 @@ if __name__ == '__main__':
     x_iso = [sol.root for sol in result.solutions]
     y_iso = [result.level] * len(x_iso)
 
-    x, y = sample_fun(fun_to_solve, window, n_samples=1000)
+    x, y = roots.sample_fun(fun_to_solve, window, n_samples=1000)
 
     plt.plot(x, y, 'b-')
     plt.plot(x_iso, y_iso, 'rx')

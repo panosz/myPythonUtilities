@@ -3,7 +3,20 @@ from collections import namedtuple
 import numpy as np
 import scipy.optimize as optimize
 
-version = '0.1.1'
+version = '0.2'
+
+
+def sample_fun(f, window, n_samples):
+    '''
+    samples a function uniformly for x in the range [window[0], window[1]].
+    :param f: callable with a single float argument
+    :param window: a tuple specifying the sampling range
+    :param n_samples: int, the number of samples
+    :return: a tuple of np.arrays x,y
+    '''
+    x0, x1 = window
+    x = np.linspace(x0, x1, n_samples)
+    return x, f(x)
 
 
 def find_root(f, window, n_samples=100):
@@ -14,9 +27,8 @@ def find_root(f, window, n_samples=100):
     :param n_samples: int, optional. number of samples distributed uniformly in window
     :return: sol: list of scipy.optimize.RootResults
     '''
-    x0, x1 = window
-    x = np.linspace(x0, x1, n_samples)
-    y = f(x)
+    x, y = sample_fun(f, window, n_samples)
+
     cross = adn.zero_cross_elems(x, y)
 
     return [optimize.root_scalar(f, bracket=bra_ket) for bra_ket in zip(cross.x_before, cross.x_after)]
@@ -42,4 +54,4 @@ def find_iso_points(f, iso_level, *args, **kwargs):
 
     root_list = find_root(f_moved, *args, **kwargs)
 
-    return Level_Cross(iso_level,root_list)
+    return Level_Cross(iso_level, root_list)
