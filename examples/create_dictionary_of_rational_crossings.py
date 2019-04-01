@@ -1,19 +1,21 @@
 import numpy as np
 import sys
 import os
-from fractions import Fraction
+from itertools import chain
 
 my_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 print(my_path)
 sys.path.insert(1, my_path)
 import panos_utilities.roots as roots
+import panos_utilities.coprimes as coprimes
 
 
 def func_to_solve(x):
     return np.sin(x)
 
+ratio_max_int = 5
 
-ratio_set = {Fraction(x, y) for x in range(-4, 4) if x != 0 for y in range(1, 4)}
+ratio_set = sorted(x for x in chain.from_iterable((x, -x) for x in coprimes.coprime_fractions(ratio_max_int)))
 
 iso_crosses = {}
 for ratio in ratio_set:
