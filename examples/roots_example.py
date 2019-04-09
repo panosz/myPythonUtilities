@@ -19,16 +19,17 @@ if __name__ == '__main__':
     print('Using panos_utilities version {}'.format(panos_utilities.version))
     print('Using roots version {}'.format(roots.version))
 
-    level = 0.5
+    level = [0.5,-0.4,0]
     window = (0, 10)
 
-    result = roots.find_iso_points(fun_to_solve, level, window)
-
-    x_iso = [sol.root for sol in result.solutions]
-    y_iso = [result.level] * len(x_iso)
-
     x, y = roots.sample_fun(fun_to_solve, window, n_samples=1000)
-
     plt.plot(x, y, 'b-')
-    plt.plot(x_iso, y_iso, 'rx')
+
+    results = roots.find_iso_points(fun_to_solve, level, window)
+
+    for result in results:
+        x_iso = [sol.root for sol in result.solutions]
+        y_iso = [result.level] * len(x_iso)
+        plt.plot(x_iso, y_iso, 'rx')
+
     plt.show()

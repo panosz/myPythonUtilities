@@ -20,7 +20,7 @@ ratio_set = sorted(x for x in chain.from_iterable((x, -x) for x in coprimes.copr
 iso_crosses = {}
 for ratio in ratio_set:
     iso_crosses[ratio] = roots.find_iso_points(func_to_solve,
-                                               iso_level=float(ratio),
+                                               iso_levels=float(ratio),
                                                window=(0, 10), n_samples=100).solutions
 
 for level, solutions in iso_crosses.items():
