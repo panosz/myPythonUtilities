@@ -38,7 +38,7 @@ def zero_cross_boolean_index(a):
     return np.append(did_it_cross, [False])
 
 
-Zero_Cross_Result = namedtuple('Zero_Cross_Result', ['x_before', 'x_after', 'y_before', 'y_after'])
+Zero_Cross_Intervals = namedtuple('Zero_Cross_Intervals', ['x_before', 'x_after', 'y_before', 'y_after'])
 
 
 def zero_cross_elems(x, y):
@@ -52,4 +52,4 @@ def zero_cross_elems(x, y):
     assert (x.size == y.size), "x and y must have equal size!"
     indices = np.arange(x.size)[zero_cross_boolean_index(y)]
 
-    return Zero_Cross_Result(x[indices], x[indices + 1], y[indices], y[indices + 1])
+    return Zero_Cross_Intervals(x[indices], x[indices + 1], y[indices], y[indices + 1])
