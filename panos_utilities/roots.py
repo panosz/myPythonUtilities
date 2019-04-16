@@ -3,7 +3,21 @@ from collections import namedtuple
 import numpy as np
 import scipy.optimize as optimize
 
-version = '0.1.3'
+version = '0.2.0-alpha'
+
+
+class RootConvergenceError(Exception):
+    """
+    Exception Raised for root that did not converge.
+
+    Attributes:
+        root -- root details
+        message -- explanation of the error
+    """
+
+    def __init__(self, root, message=""):
+        self.root = root
+        self.message = message
 
 
 def sample_fun(f, window, n_samples):
@@ -39,8 +53,19 @@ def resolve_cross_intervals(f, iso_level, intervals: adn.Zero_Cross_Intervals):
         return [optimize.root_scalar(f, bracket=bra_ket) for bra_ket in zip(intervals.x_before, intervals.x_after)]
 
 
-
 Level_Cross = namedtuple('LevelCross', ['level', 'solutions'])
+
+
+def parse_root_result(root_result: optimize.zeros.RootResults):
+    """
+    looks into the rootResult and returns the root, if it has converged.
+    Raises exception, if it has not
+    :param root_result: optimize.zeros.RootResults
+    """
+    if root_result.converged:
+        return root_result.root
+    else:
+        raise RootConvergenceError(root_result, "Root Did Not Converge")
 
 
 def _find_iso_points_single_level(f, iso_level, window, n_samples):
@@ -62,6 +87,26 @@ def _find_iso_points_single_level(f, iso_level, window, n_samples):
     return Level_Cross(iso_level, root_list)
 
 
+
+def _find_roots_single_level(f, iso_level, window, n_samples):
+    """
+    find the points where a scalar function crosses a specified horizontal line within a specified interval.
+    :param f: callable with float or numpy.array input
+    :param iso_level: float, horizontal level
+    :param window: tuple (xmin,xmax) defining the interval in which to search for roots
+    :param n_samples: int, optional. number of samples distributed uniformly in window
+    :return: Level_Cross: a namedtuple with members
+        level = float the iso level that is crossed and
+        solutions = list of scalars
+
+    Raises RootConvergenceError if a solution fails to converge
+    """
+
+    level, root_results = _find_iso_points_single_level(f,iso_level,window,n_samples)
+    roots = [parse_root_result(root_result) for root_result in root_results]
+    return Level_Cross(level,roots)
+
+
 def find_iso_points(f, iso_levels, window, n_samples=100):
     """
     find the points where a scalar function crosses a specified horizontal line within a specified interval.
@@ -78,3 +123,23 @@ def find_iso_points(f, iso_levels, window, n_samples=100):
         return _find_iso_points_single_level(f, iso_levels, window=window, n_samples=n_samples)
     else:
         return [_find_iso_points_single_level(f, level, window=window, n_samples=n_samples) for level in iso_levels]
+
+
+def find_roots(f, iso_levels, window, n_samples=100):
+    """
+    find the points where a scalar function crosses a specified horizontal line within a specified interval.
+    :param f: callable with float or numpy.array input
+    :param iso_levels: scalar or array_like: horizontal level for which to solve
+    :param window: tuple (xmin,xmax) defining the interval in which to search for roots
+    :param n_samples: int, optional. number of samples distributed uniformly in window
+    :return: Level_Cross: a namedtuple with members
+        level = float the iso level that is crossed and
+        solutions = list of scalars
+
+    Raises RootConvergenceError if a solution fails to converge
+    """
+
+    if np.isscalar(iso_levels):
+        return _find_roots_single_level(f, iso_levels, window=window, n_samples=n_samples)
+    else:
+        return [_find_roots_single_level(f, level, window=window, n_samples=n_samples) for level in iso_levels]
