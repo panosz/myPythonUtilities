@@ -19,7 +19,7 @@ if __name__ == '__main__':
     print('Using panos_utilities version {}'.format(panos_utilities.version))
     print('Using roots version {}'.format(roots.version))
 
-    level = [0.5, -0.4, 0]
+    level = [0.5, -0.4, 0, 1.2]
     window = (0, 10)
 
     x, y = roots.sample_fun(fun_to_solve, window, n_samples=1000)
