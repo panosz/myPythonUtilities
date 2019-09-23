@@ -1,2 +1,4 @@
 .idea/
-panos_utilities/__pycache__/
+__pycache__/
+venv/
+*.egg-info/
