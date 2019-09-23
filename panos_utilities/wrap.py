@@ -32,4 +32,4 @@ def wrap_minus_pi_pi(x):
     array([ 0.        , -3.14159265,  0.        ])
 
     """
-    return wrap_2pi(x + np.full_like(x, np.pi)) - np.pi
+    return wrap_2pi(x + np.full_like(x, np.pi, dtype=np.float64)) - np.pi
