@@ -1,5 +1,4 @@
 import numpy as np
-import panos_utilities
 import panos_utilities.roots as roots
 import matplotlib.pyplot as plt
 import pkg_resources
