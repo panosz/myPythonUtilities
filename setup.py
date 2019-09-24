@@ -1,8 +1,11 @@
-from setuptools import setup, find_packages
-import os
+from setuptools import setup
+from distutils.util import convert_path
 
-version_file = open(os.path.join('./panos_utilities', 'VERSION'))
+ver_path = convert_path('panos_utilities/VERSION')
+version_file = open(ver_path)
 version = version_file.read().strip()
 setup(name="panos_utilities",
       version=version,
-      packages=find_packages())
+      packages=['panos_utilities'],
+      data_files=[('panos_utilities', ['panos_utilities/VERSION'])],
+      install_requires=['numpy', 'scipy'])
