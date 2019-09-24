@@ -1,3 +1,8 @@
 from setuptools import setup, find_packages
+import os
 
-setup(name="panos_utilities", packages=find_packages())
+version_file = open(os.path.join('./panos_utilities', 'VERSION'))
+version = version_file.read().strip()
+setup(name="panos_utilities",
+      version=version,
+      packages=find_packages())

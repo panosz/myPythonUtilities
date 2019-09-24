@@ -3,7 +3,7 @@ from collections import namedtuple
 import numpy as np
 import scipy.optimize as optimize
 
-version = '0.2.0-alpha'
+__version__ = '0.2.0a0'
 
 
 class RootConvergenceError(Exception):
