@@ -1,7 +1,7 @@
 from math import gcd
 from fractions import Fraction
 
-version = '0.1'
+__version__ = '0.1.0a0'
 
 
 def pyramid(n_max):

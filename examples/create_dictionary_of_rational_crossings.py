@@ -1,11 +1,5 @@
 import numpy as np
-import sys
-import os
 from itertools import chain
-
-my_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-print(my_path)
-sys.path.insert(1, my_path)
 import panos_utilities.roots as roots
 import panos_utilities.coprimes as coprimes
 
@@ -13,15 +7,18 @@ import panos_utilities.coprimes as coprimes
 def func_to_solve(x):
     return np.sin(x)
 
+
 ratio_max_int = 5
 
-ratio_set = sorted(x for x in chain.from_iterable((x, -x) for x in coprimes.coprime_fractions(ratio_max_int)))
+ratio_set = sorted(chain.from_iterable((x, -x)
+                   for x in coprimes.coprime_fractions(ratio_max_int)))
 
 iso_crosses = {}
 for ratio in ratio_set:
     iso_crosses[ratio] = roots.find_iso_points(func_to_solve,
                                                iso_levels=float(ratio),
-                                               window=(0, 10), n_samples=100).solutions
+                                               window=(0, 10),
+                                               n_samples=100).solutions
 
 for level, solutions in iso_crosses.items():
     root_string = ','.join([str(sol.root) for sol in solutions])
