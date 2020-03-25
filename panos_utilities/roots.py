@@ -1,4 +1,5 @@
 from . import adjacent_numpy as adn
+from . import adjacent as adj
 from collections import namedtuple
 import numpy as np
 import scipy.optimize as optimize
@@ -143,3 +144,15 @@ def find_roots(f, iso_levels, window, n_samples=100):
         return _find_roots_single_level(f, iso_levels, window=window, n_samples=n_samples)
     else:
         return [_find_roots_single_level(f, level, window=window, n_samples=n_samples) for level in iso_levels]
+
+
+def roots(f, window, n_samples=100):
+    """
+        A simpler find_roots with better interface
+    """
+    x, y = sample_fun(f, window, n_samples)
+    brackets = adj.zero_cross_brackets(x, y)
+
+    for x_bracket, _ in brackets:
+        sol = optimize.root_scalar(f, bracket=x_bracket)
+        yield sol.root, sol.converged
