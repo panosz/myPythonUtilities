@@ -1,15 +1,7 @@
 #  import numpy as np
 import numpy.testing as nt
-import pytest
+#  import pytest
 from panos_utilities import adjacent as adj
-
-
-@pytest.mark.skip()
-def test_fails():
-    result = (1, 2)
-    expected = (0, 0)
-    nt.assert_allclose(result, expected,
-                       rtol=1e-12, atol=1e-12)
 
 
 def test_different_sign_scalar():
@@ -68,3 +60,52 @@ def test_zero_cross_multiple_brackets():
         xb_expected, yb_expected = be
         nt.assert_array_equal(xb, xb_expected)
         nt.assert_array_equal(yb, yb_expected)
+
+
+def test_zero_cross_2D_multiple_brackets():
+    x = range(10)
+    y = [[1, 10],
+         [0, 20],
+         [-1, 18],
+         [-1, 9],
+         [1, 8],
+         [0, 3]]
+
+    def first_component(y_e):
+        return y_e[0]
+
+    b_expected = [
+                  ((1, 2), ([0, 20], [-1, 18])),
+                  ((3, 4), ([-1, 9], [1, 8]))
+                 ]
+    brackets = list(adj.zero_cross_brackets(x, y, transform=first_component))
+
+    for b, be in zip(brackets, b_expected):
+        xb, yb = b
+        xb_expected, yb_expected = be
+        nt.assert_array_equal(xb, xb_expected)
+        nt.assert_array_equal(yb, yb_expected)
+
+
+def test_zero_cross_2D_empty():
+    x = []
+    y = []
+
+    def first_component(y_e):
+        return y_e[0]
+
+    brackets = list(adj.zero_cross_brackets(x, y, transform=first_component))
+
+    assert len(brackets) == 0
+
+
+def test_zero_cross_2D_one_element():
+    x = [1]
+    y = [[1, 2]]
+
+    def first_component(y_e):
+        return y_e[0]
+
+    brackets = list(adj.zero_cross_brackets(x, y, transform=first_component))
+
+    assert len(brackets) == 0
