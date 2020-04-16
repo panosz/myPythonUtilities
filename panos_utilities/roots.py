@@ -146,11 +146,45 @@ def find_roots(f, iso_levels, window, n_samples=100):
         return [_find_roots_single_level(f, level, window=window, n_samples=n_samples) for level in iso_levels]
 
 
-def roots(f, window, n_samples=100):
+def roots(f, window, n_samples=100, samples=None):
     """
         A simpler find_roots with better interface
+        Find the roots of a scalar function
+
+        Parameters
+        ----------
+        f: callable
+            The function.
+
+        window: (xmin, xmax),
+            The domain in which to look for points.
+
+        n_samples: int, optional
+            The number of samples.
+            Ignored of `samples` is not None.
+            The samples will be distributed
+            uniformly in the `window` domain. The algorithm will track
+            down roots, when it detects a change of sing between adjacent
+            samples. This means that roots that are close by may be missed
+            if the `n_samples` is too small.
+
+            Alternatively, a sequence of pre calculated samples can be
+            passed through the `samples` variable.
+            Default is 100.
+
+        samples: (x_s, y_s), optional
+            If not None, skip the sampling step and use the
+            samples passed `here` instead.
+            Default is None
+
     """
-    x, y = sample_fun(f, window, n_samples)
+    if samples is not None:
+        x = np.asarray(samples[0])
+        y = np.asarray(samples[1])
+
+    else:
+        x, y = sample_fun(f, window, n_samples)
+
     brackets = adj.zero_cross_brackets(x, y)
 
     for x_bracket, _ in brackets:
